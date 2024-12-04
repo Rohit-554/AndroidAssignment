@@ -10,9 +10,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
@@ -53,6 +59,7 @@ fun AppNavigation(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemListScreen(
     viewModel: JarViewModel,
@@ -61,6 +68,7 @@ fun ItemListScreen(
     navController: NavHostController
 ) {
     val items = viewModel.listStringData.collectAsState()
+    var searchItem = remember { mutableStateOf("") }
 
     if (navigate.value.isNotBlank()) {
         val currRoute = navController.currentDestination?.route.orEmpty()
@@ -68,19 +76,37 @@ fun ItemListScreen(
             navController.navigate("item_detail/${navigate.value}")
         }
     }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        items(items.value) { item ->
-            ItemCard(
-                item = item,
-                onClick = { onNavigateToDetail(item.id) }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+
+    DisposableEffect(navigate.value) {
+        onDispose {
+            navigate.value = ""
         }
     }
+
+    Scaffold{ paddingValues ->
+        TextField(
+            value = searchItem.value,
+            onValueChange = {
+                searchItem.value = it
+            },
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            items(items.value) { item ->
+                ItemCard(
+                    item = item,
+                    onClick = { onNavigateToDetail(item.id) }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+
+    }
+
 }
 
 @Composable
