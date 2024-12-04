@@ -22,6 +22,17 @@ class JarViewModel : ViewModel() {
 
     private val repository: JarRepository = JarRepositoryImpl(createRetrofit())
 
+    private val _searchText = MutableStateFlow<String>("")
+    val searchText: StateFlow<String>
+        get() = _searchText
+
+    fun updateSearchText(search:String){
+        _searchText.value = search
+    }
+
+
+
+
     fun fetchData() {
         viewModelScope.launch {
             val data = repository.fetchResults()

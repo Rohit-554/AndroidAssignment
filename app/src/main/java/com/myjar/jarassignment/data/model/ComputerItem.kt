@@ -6,7 +6,11 @@ data class ComputerItem(
     val id: String,
     val name: String,
     val data: ItemData? = null
-)
+){
+    fun isDataFound(searchText:String):Boolean{
+        return searchText.contains(name)
+    }
+}
 
 data class ItemData(
     val color: String? = null,

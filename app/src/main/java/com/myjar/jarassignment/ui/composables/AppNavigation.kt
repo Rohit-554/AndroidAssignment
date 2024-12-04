@@ -87,6 +87,7 @@ fun ItemListScreen(
         TextField(
             value = searchItem.value,
             onValueChange = {
+                viewModel.updateSearchText(searchItem.value)
                 searchItem.value = it
             },
         )
