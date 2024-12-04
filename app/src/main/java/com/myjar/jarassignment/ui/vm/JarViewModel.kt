@@ -1,5 +1,6 @@
 package com.myjar.jarassignment.ui.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myjar.jarassignment.createRetrofit
@@ -8,6 +9,9 @@ import com.myjar.jarassignment.data.repository.JarRepository
 import com.myjar.jarassignment.data.repository.JarRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class JarViewModel : ViewModel() {
@@ -20,7 +24,11 @@ class JarViewModel : ViewModel() {
 
     fun fetchData() {
         viewModelScope.launch {
-            repository.fetchResults()
+            val data = repository.fetchResults()
+            data.collect { it->
+                Log.d("value","${it}")
+                _listStringData.value = it
+            }
         }
     }
 }

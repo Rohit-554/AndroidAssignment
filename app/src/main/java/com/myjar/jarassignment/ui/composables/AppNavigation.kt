@@ -1,5 +1,6 @@
 package com.myjar.jarassignment.ui.composables
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -88,7 +91,7 @@ fun ItemCard(item: ComputerItem, onClick: () -> Unit) {
             .padding(8.dp)
             .clickable { onClick() }
     ) {
-        Text(text = item.name, fontWeight = FontWeight.Bold, color = Color.Transparent)
+        Text(text = item.name, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
